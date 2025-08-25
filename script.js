@@ -7,19 +7,50 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentRow = 0;
     let currentGuess = '';
 
-    const themeSwitch = document.getElementById('checkbox');
-    themeSwitch.addEventListener('change', toggleTheme);
+    // --- Theme Toggle Logic ---
+    const themeToggle = document.getElementById('theme-toggle');
+    const storageKey = 'theme-preference';
 
-    function toggleTheme() {
-        if (themeSwitch.checked) {
-            document.body.classList.remove('light-mode');
-            document.body.classList.add('dark-mode');
+    const onClick = () => {
+        // flip current value
+        const currentTheme = document.body.getAttribute('data-theme');
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        setPreference(newTheme);
+    };
+
+    const getColorPreference = () => {
+        if (localStorage.getItem(storageKey)) {
+            return localStorage.getItem(storageKey);
         } else {
-            document.body.classList.remove('dark-mode');
-            document.body.classList.add('light-mode');
+            return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
         }
-    }
+    };
 
+    const setPreference = (themeValue) => {
+        localStorage.setItem(storageKey, themeValue);
+        reflectPreference(themeValue);
+    };
+
+    const reflectPreference = (themeValue) => {
+        document.body.setAttribute('data-theme', themeValue);
+        document.querySelector('#theme-toggle')?.setAttribute('aria-label', themeValue);
+    };
+
+    const initialTheme = getColorPreference();
+    reflectPreference(initialTheme);
+
+    window.onload = () => {
+        // now this script can find and listen for clicks on the control
+        document.querySelector('#theme-toggle').addEventListener('click', onClick);
+    };
+
+    // sync with system changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', ({ matches: isDark }) => {
+        const newTheme = isDark ? 'dark' : 'light';
+        setPreference(newTheme);
+    });
+
+    // --- Game Logic ---
     function renderScreen(screen) {
         appContainer.innerHTML = '';
         const screenElement = document.createElement('div');
@@ -71,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const keyboardLayout = [
             ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
             ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
-            ['ENTER', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', 'BACK']
+            ['DELETE', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', 'ENTER']
         ];
 
         keyboardLayout.forEach(rowKeys => {
@@ -106,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 feedbackDiv.textContent = 'Not enough letters!';
             }
-        } else if (key === 'BACK' || key === 'BACKSPACE') {
+        } else if (key === 'DELETE' || key === 'BACKSPACE') {
             currentGuess = currentGuess.slice(0, -1);
             updateGrid();
         } else if (currentGuess.length < wordLength) {
@@ -190,24 +221,82 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     }
+    
+    // New function to handle the AJAX form submissions for both screens
+    function setupFormSubmission(formId, feedbackId) {
+        const form = document.getElementById(formId);
+        const formFeedback = document.getElementById(feedbackId);
 
-    // --- Win Screen ---
-    function renderWinScreen() {
-        const winScreen = `
-            <h1>Correct! Bug Squashed! 🎉</h1>
-            <p>Since you're so good at solving puzzles, I was wondering if you'd be up for grabbing a coffee sometime?</p>
-            <button id="winButton" class="button">Let's do it!</button>
-        `;
-        renderScreen(winScreen);
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault(); // This is the key line that stops the redirect
+
+            formFeedback.textContent = "Sending...";
+            const data = new FormData(form);
+
+            try {
+                const response = await fetch(form.action, {
+                    method: form.method,
+                    body: data,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    if()
+                    formFeedback.textContent = "";
+                    form.querySelector('button').disabled = true; // Disable the button after submission
+                } else {
+                    formFeedback.textContent = "";
+                }
+            } catch (error) {
+                console.error('Submission error:', error);
+                formFeedback.textContent = "";
+            }
+        });
     }
 
-    // --- Loss Screen ---
+    function renderWinScreen() {
+        const winScreen = `
+            <h1>Correct! You've Won! 🎉</h1>
+            <p>Well... Since you're so good at solving puzzles, I was wondering if you'd be up for grabbing a coffee coming Sunday? :D</p>
+            
+            <form id="winFormYes" action="https://formspree.io/f/xyzdyylp" method="POST">
+                <input type="hidden" name="response" value="Yes - from Win Screen">
+                <button type="submit" class="button">Sure, Let's do it!</button>
+            </form>
+            <div id="win-feedback-yes" class="feedback"></div>
+
+            <form id="winFormNo" action="https://formspree.io/f/xyzdyylp" method="POST">
+                <input type="hidden" name="response" value="No - from Win Screen">
+                <button type="submit" class="button_2">I can't.</button>
+            </form>
+            <div id="win-feedback-no" class="feedback"></div>
+        `;
+        renderScreen(winScreen);
+        setupFormSubmission('winFormYes', 'win-feedback-yes');
+        setupFormSubmission('winFormNo', 'win-feedback-no');
+    }
+
     function renderLossScreen() {
         const lossScreen = `
-            <h1>System Overload! 🥵</h1>
-            <p>It looks like the bug won this time. But I'll tell you the answer: It was ${secretWord}. I still think we should grab one sometime. 😉</p>
-            <button id="lossButton" class="button">Okay, I'm in.</button>
+            <h1>Sorryy but you lost.. :')</h1>
+            <p>But I'll tell you the answer: It was Coffee! Something I was wondering if you'd be up to have one with me coming Sunday? :D</p>
+            
+            <form id="lossFormYes" action="https://formspree.io/f/xyzdyylp" method="POST">
+                <input type="hidden" name="response" value="Yes - from Loss Screen">
+                <button type="submit" class="button">Okay, I'm in.</button>
+            </form>
+            <div id="loss-feedback-yes" class="feedback"></div>
+
+            <form id="lossFormNo" action="https://formspree.io/f/xyzdyylp" method="POST">
+                <input type="hidden" name="response" value="No - from Loss Screen">
+                <button type="submit" class="button_2">I'm out.</button>
+            </form>
+            <div id="loss-feedback-no" class="feedback"></div>
         `;
         renderScreen(lossScreen);
+        setupFormSubmission('lossFormYes', 'loss-feedback-yes');
+        setupFormSubmission('lossFormNo', 'loss-feedback-no');
     }
 });

@@ -5,89 +5,115 @@
     --secondary-color: #A6B28B; /* Sage Green */
     --accent-color: #F5C9B0; /* Peach */
     --background-light: #F9F6F3; /* Off-White */
-    --text-light: #333; /* Default dark text */
+    --text-dark: #333; /* Default dark text */
     --box-border: #d3d6da; /* Default gray border */
+
+    /* Variables for the theme-toggle button */
+    --icon-fill: currentColor;
+    --icon-fill-hover: #1C352D; /* Dark Green for the icon hover state */
 }
 
-/* --- Light Mode Colors --- */
-body.light-mode {
+/* --- Theme-based Colors with data-attribute --- */
+body[data-theme='light'] {
     background-color: var(--background-light);
     color: var(--primary-color);
 }
 
-.light-mode #app-container {
+body[data-theme='light'] #app-container {
     background-color: #fff;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
-.light-mode h1 {
+body[data-theme='light'] h1 {
     color: var(--primary-color);
 }
 
-.light-mode .button {
+body[data-theme='light'] .button {
     background-color: var(--secondary-color);
     color: var(--primary-color);
 }
 
-.light-mode .button:hover {
-    background-color: #929d7c; /* A slightly darker sage */
+body[data-theme='light'] .button:hover {
+    background-color: #929d7c;
 }
 
-.light-mode .box {
+body[data-theme='light'] .button_2 {
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+}
+
+body[data-theme='light'] .button_2:hover {
+    background-color: #554f44;
+}
+
+body[data-theme='light'] .box {
     border-color: var(--box-border);
 }
 
-.light-mode .key {
+body[data-theme='light'] .key {
     background-color: var(--box-border);
-    color: var(--text-light);
+    color: var(--text-dark);
 }
 
-.light-mode .key:hover {
+body[data-theme='light'] .key:hover {
     background-color: #c0c3c6;
 }
 
+body[data-theme='light'] .hint {
+    color: #777;
+}
+
 /* --- Dark Mode Colors --- */
-body.dark-mode {
+body[data-theme='dark'] {
     background-color: var(--primary-color);
     color: var(--background-light);
 }
 
-.dark-mode #app-container {
-    background-color: #2b4237; /* A slightly lighter shade of primary-color */
+body[data-theme='dark'] #app-container {
+    background-color: #2b4237;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
-.dark-mode h1 {
+body[data-theme='dark'] h1 {
     color: var(--accent-color);
 }
 
-.dark-mode p, .dark-mode .hint {
+body[data-theme='dark'] p, body[data-theme='dark'] .hint {
     color: var(--background-light);
 }
 
-.dark-mode .button {
+body[data-theme='dark'] .button {
     background-color: var(--secondary-color);
     color: var(--primary-color);
 }
 
-.dark-mode .button:hover {
+body[data-theme='dark'] .button:hover {
     background-color: #929d7c;
 }
 
-.dark-mode .box {
-    border-color: #5d665f; /* Darker border */
+body[data-theme='dark'] .button_2 {
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
 }
 
-.dark-mode .key {
-    background-color: #435149; /* Darker key background */
+body[data-theme='dark'] .button_2:hover {
+    background-color: #554f44;
+}
+
+body[data-theme='dark'] .box {
+    border-color: #5d665f;
+}
+
+body[data-theme='dark'] .key {
+    background-color: #435149;
     color: var(--background-light);
 }
 
-.dark-mode .key:hover {
+body[data-theme='dark'] .key:hover {
     background-color: #55665d;
 }
 
-/* --- Shared Game Styles --- */
+/* --- Shared Game Styles (non-theme specific) --- */
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     display: flex;
@@ -123,6 +149,22 @@ body {
 }
 
 .button:active {
+    transform: scale(0.98);
+}
+
+.button_2 {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    width: 80%;
+    margin-top: 20px;
+}
+
+.button_2:active {
     transform: scale(0.98);
 }
 
@@ -172,7 +214,7 @@ body {
 }
 
 .box.absent {
-    background-color: #787c7e; /* Gray */
+    background-color: #787c7e;
     border-color: #787c7e;
     color: white;
 }
@@ -221,73 +263,103 @@ body {
     color: white;
 }
 
-/* --- Dark Mode Switch Styles --- */
+/* --- Theme Toggle Button from web.dev --- */
+@import "https://unpkg.com/open-props/easings.min.css";
+
 .theme-switch-wrapper {
     position: absolute;
     top: 20px;
     right: 20px;
-    display: flex;
-    align-items: center;
 }
 
-.theme-switch {
-    display: inline-block;
-    height: 34px;
-    position: relative;
-    width: 60px;
-}
-
-.theme-switch input {
-    display: none;
-}
-
-.slider {
-    background-color: var(--primary-color);
-    bottom: 0;
-    cursor: pointer;
-    left: 0;
-    position: absolute;
-    right: 0;
-    top: 0;
-    transition: .4s;
-}
-
-.slider:before {
-    background-color: #f9f6f3;
-    bottom: 4px;
-    content: "";
-    height: 26px;
-    left: 4px;
-    position: absolute;
-    transition: .4s;
-    width: 26px;
-}
-
-input:checked + .slider {
-    background-color: var(--secondary-color);
-}
-
-input:checked + .slider:before {
-    transform: translateX(26px);
-}
-
-.slider.round {
-    border-radius: 34px;
-}
-
-.slider.round:before {
+.theme-toggle {
+    --size: 2rem;
+    background: none;
+    border: none;
+    padding: 0;
+    inline-size: var(--size);
+    block-size: var(--size);
+    aspect-ratio: 1;
     border-radius: 50%;
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    outline-offset: 5px;
 }
 
-.mode-text {
-    margin-left: 10px;
-    font-size: 0.9em;
-    color: var(--primary-color);
-    transition: color 0.5s;
+.sun-and-moon > :is(.moon, .sun, .sun-beams) {
+    transform-origin: center;
 }
 
-body.dark-mode .mode-text {
-    color: var(--background-light);
+.sun-and-moon > :is(.moon, .sun) {
+    fill: currentColor;
+}
+
+.theme-toggle:is(:hover, :focus-visible) > .sun-and-moon > :is(.moon, .sun) {
+    fill: var(--icon-fill-hover);
+}
+
+.sun-and-moon > .sun-beams {
+    stroke: currentColor;
+    stroke-width: 2px;
+}
+
+.theme-toggle:is(:hover, :focus-visible) .sun-and-moon > .sun-beams {
+    stroke: var(--icon-fill-hover);
+}
+
+/* Dark theme specific styles for the icon */
+[data-theme="dark"] .sun-and-moon > .sun {
+    transform: scale(1.75);
+}
+
+[data-theme="dark"] .sun-and-moon > .sun-beams {
+    opacity: 0;
+}
+
+[data-theme="dark"] .sun-and-moon > .moon > circle {
+    transform: translateX(-7px);
+}
+
+@supports (cx: 1) {
+    [data-theme="dark"] .sun-and-moon > .moon > circle {
+        cx: 17;
+        transform: translateX(0);
+    }
+}
+
+/* Animations */
+@media (prefers-reduced-motion: no-preference) {
+    .sun-and-moon > .sun {
+        transition: transform .5s var(--ease-elastic-3);
+    }
+    .sun-and-moon > .sun-beams {
+        transition: transform .5s var(--ease-elastic-4), opacity .5s var(--ease-3);
+    }
+    .sun-and-moon .moon > circle {
+        transition: transform .25s var(--ease-out-5);
+    }
+
+    @supports (cx: 1) {
+        .sun-and-moon .moon > circle {
+            transition: cx .25s var(--ease-out-5);
+        }
+    }
+
+    [data-theme="dark"] .sun-and-moon > .sun {
+        transition-timing-function: var(--ease-3);
+        transition-duration: .25s;
+    }
+
+    [data-theme="dark"] .sun-and-moon > .sun-beams {
+        transition-duration: .15s;
+        transform: rotateZ(-25deg);
+    }
+
+    [data-theme="dark"] .sun-and-moon > .moon > circle {
+        transition-duration: .5s;
+        transition-delay: .25s;
+    }
 }
 
 @keyframes fadeIn {
