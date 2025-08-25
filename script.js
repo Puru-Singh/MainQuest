@@ -223,14 +223,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     // New function to handle the AJAX form submissions for both screens
-    function setupFormSubmission(formId, feedbackId) {
+    function setupFormSubmission(formId) {
         const form = document.getElementById(formId);
-        const formFeedback = document.getElementById(feedbackId);
 
         form.addEventListener('submit', async (event) => {
             event.preventDefault(); // This is the key line that stops the redirect
 
-            formFeedback.textContent = "Sending...";
             const data = new FormData(form);
 
             try {
@@ -243,17 +241,47 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 if (response.ok) {
-                    if()
-                    formFeedback.textContent = "";
-                    form.querySelector('button').disabled = true; // Disable the button after submission
+                    const responseType = data.get('response');
+                    renderFinalScreen(responseType);
                 } else {
-                    formFeedback.textContent = "";
+                    renderErrorScreen();
                 }
             } catch (error) {
                 console.error('Submission error:', error);
-                formFeedback.textContent = "";
+                renderErrorScreen();
             }
         });
+    }
+
+    // New function to render the final message screen
+    function renderFinalScreen(responseType) {
+        let message = '';
+        if (responseType === 'Yes - from Win Screen' || responseType === 'Yes - from Loss Screen') {
+            message = "Great!! I look forward to seeing you :D";
+        } else if (responseType === 'No - from Win Screen' || responseType === 'No - from Loss Screen') {
+            message = "I understand, thank you for going through this mini game though :') I hope for nothing but the best for you!";
+        }
+
+        const finalScreen = `
+            <div class="final-message-container">
+                <p class="body">${message}</p>
+            </div>
+        `;
+        renderScreen(finalScreen);
+        document.body.classList.add('black-background'); // Add class to make the body black
+        document.querySelector('.theme-switch-wrapper').style.display = 'none'; // Hide the theme switch
+    }
+
+    // New function to render the error screen
+    function renderErrorScreen() {
+        const errorScreen = `
+            <div class="final-message-container">
+                <p class="body">Response isn't recorded, can you please DM me back :')</p>
+            </div>
+        `;
+        renderScreen(errorScreen);
+        document.body.classList.add('black-background'); // Add class to make the body black
+        document.querySelector('.theme-switch-wrapper').style.display = 'none'; // Hide the theme switch
     }
 
     function renderWinScreen() {
@@ -265,17 +293,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 <input type="hidden" name="response" value="Yes - from Win Screen">
                 <button type="submit" class="button">Sure, Let's do it!</button>
             </form>
-            <div id="win-feedback-yes" class="feedback"></div>
 
             <form id="winFormNo" action="https://formspree.io/f/xyzdyylp" method="POST">
                 <input type="hidden" name="response" value="No - from Win Screen">
                 <button type="submit" class="button_2">I can't.</button>
             </form>
-            <div id="win-feedback-no" class="feedback"></div>
         `;
         renderScreen(winScreen);
-        setupFormSubmission('winFormYes', 'win-feedback-yes');
-        setupFormSubmission('winFormNo', 'win-feedback-no');
+        setupFormSubmission('winFormYes');
+        setupFormSubmission('winFormNo');
     }
 
     function renderLossScreen() {
@@ -287,16 +313,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 <input type="hidden" name="response" value="Yes - from Loss Screen">
                 <button type="submit" class="button">Okay, I'm in.</button>
             </form>
-            <div id="loss-feedback-yes" class="feedback"></div>
 
             <form id="lossFormNo" action="https://formspree.io/f/xyzdyylp" method="POST">
                 <input type="hidden" name="response" value="No - from Loss Screen">
                 <button type="submit" class="button_2">I'm out.</button>
             </form>
-            <div id="loss-feedback-no" class="feedback"></div>
         `;
         renderScreen(lossScreen);
-        setupFormSubmission('lossFormYes', 'loss-feedback-yes');
-        setupFormSubmission('lossFormNo', 'loss-feedback-no');
+        setupFormSubmission('lossFormYes');
+        setupFormSubmission('lossFormNo');
     }
 });
