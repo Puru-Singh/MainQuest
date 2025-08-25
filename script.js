@@ -7,6 +7,19 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentRow = 0;
     let currentGuess = '';
 
+    const themeSwitch = document.getElementById('checkbox');
+    themeSwitch.addEventListener('change', toggleTheme);
+
+    function toggleTheme() {
+        if (themeSwitch.checked) {
+            document.body.classList.remove('light-mode');
+            document.body.classList.add('dark-mode');
+        } else {
+            document.body.classList.remove('dark-mode');
+            document.body.classList.add('light-mode');
+        }
+    }
+
     function renderScreen(screen) {
         appContainer.innerHTML = '';
         const screenElement = document.createElement('div');
@@ -85,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function handleKeyPress(key) {
         const feedbackDiv = document.getElementById('feedback');
-        feedbackDiv.textContent = ''; // Clear feedback
+        feedbackDiv.textContent = '';
 
         if (key === 'ENTER') {
             if (currentGuess.length === wordLength) {
@@ -119,14 +132,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const secretLetters = secret.split('');
         const guessLetters = guess.split('');
-        const letterStatus = {}; // To track keyboard key colors
+        const letterStatus = {};
 
         // First pass: find correct letters
         for (let i = 0; i < wordLength; i++) {
             if (guessLetters[i] === secretLetters[i]) {
                 boxes[i].classList.add('correct');
                 letterStatus[guessLetters[i]] = 'correct';
-                secretLetters[i] = null; // Mark as used
+                secretLetters[i] = null;
             }
         }
 
@@ -138,10 +151,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (letterStatus[guessLetters[i]] !== 'correct') {
                         letterStatus[guessLetters[i]] = 'present';
                     }
-                    secretLetters[secretLetters.indexOf(guessLetters[i])] = null; // Mark as used
+                    secretLetters[secretLetters.indexOf(guessLetters[i])] = null;
                 } else {
                     boxes[i].classList.add('absent');
-                    letterStatus[guessLetters[i]] = 'absent';
+                    if (!letterStatus[guessLetters[i]]) {
+                        letterStatus[guessLetters[i]] = 'absent';
+                    }
                 }
             }
         }
