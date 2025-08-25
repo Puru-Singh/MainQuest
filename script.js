@@ -71,8 +71,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Game Screen ---
     function renderGameScreen() {
         const gameScreen = `
-            <h1>The Coffee Quest</h1>
-            <p class="hint">Hint: A popular beverage, and a major export from Karnataka.</p>
+            <h1>Word hunting!</h1>
+            <p class="hint">Hint: It's something you love, and Karnataka's popular for it.</p>
             <div id="game-grid"></div>
             <div id="keyboard"></div>
             <div id="feedback" class="feedback"></div>
