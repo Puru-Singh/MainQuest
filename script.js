@@ -257,7 +257,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderFinalScreen(responseType) {
         let message = '';
         if (responseType === 'Yes - from Win Screen' || responseType === 'Yes - from Loss Screen') {
-            message = "Great!! I look forward to seeing you :D";
+            message = "Great!! I look forward to seeing you :D ";
         } else if (responseType === 'No - from Win Screen' || responseType === 'No - from Loss Screen') {
             message = "I understand, thank you for going through this mini game though :') I hope for nothing but the best for you!";
         }
