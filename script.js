@@ -71,8 +71,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Game Screen ---
     function renderGameScreen() {
         const gameScreen = `
-            <h1>Word hunting!</h1>
+            <h1>Bug hunting!</h1>
             <p class="hint">Hint: It's something you love, and Karnataka's popular for it.</p>
+            <p class="hint">Yellow means that the character is present but position is incorrect, Green means it's present and the position is correct as well.</p>
             <div id="game-grid"></div>
             <div id="keyboard"></div>
             <div id="feedback" class="feedback"></div>
