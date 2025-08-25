@@ -1,175 +1,168 @@
 /* style.css */
- body {
-     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-     background-color: #f4f4f9;
-     color: #6c2b11;
-     display: flex;
-     justify-content: center;
-     align-items: center;
-     min-height: 100vh;
-     margin: 0;
-     padding: 20px;
-     box-sizing: border-box;
-     position: relative; /* Needed for the pseudo-element to be positioned correctly */
-     overflow: hidden; /* Prevents overflow from the blurred image */
- }
- 
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
 
- /* This is the new part to fix the blur issue */
- body::before {
-     content: '';
-     position: absolute;
-     top: 0;
-     left: 0;
-     width: 100%;
-     height: 100%;
-     background-image: url('bg.png'); /* Replace with your image path */
-     background-size: cover;
-     background-position: center;
-     filter: blur(5px); /* Apply blur only to this pseudo-element */
-     z-index: -1; /* Place it behind the main content */
- }
- 
+#app-container {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    padding: 30px;
+    text-align: center;
+    max-width: 450px;
+    width: 100%;
+    animation: fadeIn 0.8s ease-in-out;
+}
 
- #app-container {
-     background: rgba(255, 255, 255, 0.8);
-     border-radius: 12px;
-     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-     padding: 30px;
-     text-align: center;
-     max-width: 400px;
-     width: 100%;
-     animation: fadeIn 0.8s ease-in-out;
-     position: relative; /* Ensure the container is above the blurred background */
-     z-index: 1;
- }
- 
+h1 {
+    font-size: 1.8em;
+    margin-bottom: 10px;
+    color: #4a4a4a;
+}
 
- h1 {
-     font-size: 1.8em;
-     margin-bottom: 10px;
-     color: #405416;
- }
- 
+p {
+    font-size: 1em;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
 
- p {
-     font-size: 1em;
-     line-height: 1.6;
-     margin-bottom: 20px;
-     color: #6c2b11;
- }
- 
+.button {
+    background-color: #5c67f2;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    width: 80%;
+    margin-top: 20px;
+}
 
- .input-group {
-     margin-top: 20px;
-     display: flex;
-     flex-direction: column;
-     align-items: center;
- }
- 
+.button:hover {
+    background-color: #4a54e1;
+}
 
- input::placeholder {
-     color: rgba(108, 43, 17, 0.6);
- }
- 
+.button:active {
+    transform: scale(0.98);
+}
 
- input:focus {
-     border-color: #405416;
-     outline: none;
-     box-shadow: 0 0 8px rgba(64, 84, 22, 0.5);
- }
- 
+.hint {
+    font-style: italic;
+    color: #777;
+    margin-top: 20px;
+    font-size: 0.9em;
+}
 
- input::-webkit-input-placeholder {
-     color: rgba(108, 43, 17, 0.6);
- }
- 
+/* Game Grid Styles */
+#game-grid {
+    display: grid;
+    grid-template-rows: repeat(5, 1fr);
+    grid-gap: 8px;
+    padding: 10px 0;
+}
 
- input::-moz-placeholder {
-     color: rgba(108, 43, 17, 0.6);
- }
- 
+.row {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-gap: 8px;
+    height: 60px;
+}
 
- input:-ms-input-placeholder {
-     color: rgba(108, 43, 17, 0.6);
- }
- 
+.box {
+    width: 100%;
+    height: 100%;
+    border: 2px solid #d3d6da;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2em;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: background-color 0.3s, border-color 0.3s;
+}
 
- input::-ms-input-placeholder {
-     color: rgba(108, 43, 17, 0.6);
- }
- 
+.box.correct {
+    background-color: #6aaa64; /* Green */
+    border-color: #6aaa64;
+    color: white;
+}
 
- input {
-     width: 80%;
-     padding: 12px;
-     margin-bottom: 15px;
-     border: 2px solid #d99e73;
-     border-radius: 8px;
-     font-size: 1em;
-     text-align: center;
-     text-transform: uppercase;
-     color: #6c2b11;
- }
- 
+.box.present {
+    background-color: #c9b458; /* Yellow */
+    border-color: #c9b458;
+    color: white;
+}
 
- .button {
-     background-color: #405416;
-     color: white;
-     padding: 12px 24px;
-     border: none;
-     border-radius: 8px;
-     font-size: 1em;
-     font-weight: bold;
-     cursor: pointer;
-     transition: background-color 0.3s ease, transform 0.1s ease;
-     width: 80%;
-     margin-top: 10px;
- }
- 
+.box.absent {
+    background-color: #787c7e; /* Gray */
+    border-color: #787c7e;
+    color: white;
+}
 
- .button:hover {
-     background-color: #364712;
- }
- 
+/* Keyboard Styles */
+#keyboard {
+    margin-top: 20px;
+}
 
- .button:active {
-     transform: scale(0.98);
- }
- 
+.key-row {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 8px;
+}
 
- .feedback {
-     font-weight: bold;
-     margin-top: 15px;
-     height: 20px;
- }
- 
+.key {
+    background-color: #d3d6da;
+    color: #333;
+    border: none;
+    border-radius: 4px;
+    padding: 12px 8px;
+    margin: 0 4px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    flex-grow: 1;
+    transition: background-color 0.3s;
+}
 
- .correct {
-     color: #405416;
- }
- 
+.key.correct {
+    background-color: #6aaa64;
+    color: white;
+}
 
- .incorrect {
-     color: #d99e73;
- }
- 
+.key.present {
+    background-color: #c9b458;
+    color: white;
+}
 
- .hint {
-     font-style: italic;
-     color: #d99e73;
-     margin-top: 20px;
-     font-size: 0.9em;
- }
- 
+.key.absent {
+    background-color: #787c7e;
+    color: white;
+}
 
- @keyframes fadeIn {
-     from {
-         opacity: 0;
-         transform: translateY(20px);
-     }
-     to {
-         opacity: 1;
-         transform: translateY(0);
-     }
- }
+#backspace-key, #enter-key {
+    padding: 12px 18px;
+    font-size: 0.8em;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
