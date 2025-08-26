@@ -311,7 +311,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderLossScreen() {
         document.body.classList.add('game-over');
         const lossScreen = `
-            <h1>Sorryy but you lost.. :')</h1>
+            <h1>Sorryy, that wasn't it.. :')</h1>
             <p>But I'll tell you the answer: It was Coffee! Something I was wondering if you'd be up to have one with me this Sunday? :D</p>
             
             <form id="lossFormYes" action="https://formspree.io/f/xyzdyylp" method="POST">
