@@ -286,6 +286,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderWinScreen() {
+        document.body.classList.add('game-over');
         const winScreen = `
             <h1>Correct! You've Won! 🎉</h1>
             <p>Well... Since you're so good at solving puzzles, I was wondering if you'd be up for grabbing a coffee coming Sunday? :D</p>
@@ -306,6 +307,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderLossScreen() {
+        document.body.classList.add('game-over');
         const lossScreen = `
             <h1>Sorryy but you lost.. :')</h1>
             <p>But I'll tell you the answer: It was Coffee! Something I was wondering if you'd be up to have one with me coming Sunday? :D</p>
