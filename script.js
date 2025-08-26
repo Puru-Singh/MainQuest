@@ -73,7 +73,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const gameScreen = `
             <h1>Bug hunting!</h1>
             <p class="hint">Hint: It's something you love, and Karnataka's popular for it.</p>
-            <p class="hint">Yellow means that the character is present but position is incorrect, Green means it's present and the position is correct as well.</p>
+            <p class="hint">Pink means that the character is present but position is incorrect.</p>
+            <p class="hint">Green means it's present and the position is correct as well.</p>
+            <p class="hint">Grey means the position and the character both are incorrect.</p>
             <div id="game-grid"></div>
             <div id="keyboard"></div>
             <div id="feedback" class="feedback"></div>
@@ -289,7 +291,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.classList.add('game-over');
         const winScreen = `
             <h1>Correct! You've Won! 🎉</h1>
-            <p>Well... Since you're so good at solving puzzles, I was wondering if you'd be up for grabbing a coffee coming Sunday? :D</p>
+            <p>Well... Since you're so good at solving puzzles, I was wondering if you'd be up for grabbing a coffee this Sunday? :D</p>
             
             <form id="winFormYes" action="https://formspree.io/f/xyzdyylp" method="POST">
                 <input type="hidden" name="response" value="Yes - from Win Screen">
@@ -310,7 +312,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.classList.add('game-over');
         const lossScreen = `
             <h1>Sorryy but you lost.. :')</h1>
-            <p>But I'll tell you the answer: It was Coffee! Something I was wondering if you'd be up to have one with me coming Sunday? :D</p>
+            <p>But I'll tell you the answer: It was Coffee! Something I was wondering if you'd be up to have one with me this Sunday? :D</p>
             
             <form id="lossFormYes" action="https://formspree.io/f/xyzdyylp" method="POST">
                 <input type="hidden" name="response" value="Yes - from Loss Screen">
