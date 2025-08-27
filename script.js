@@ -1,3 +1,4 @@
+// script.js
 document.addEventListener('DOMContentLoaded', () => {
     const appContainer = document.getElementById('app-container');
     const secretWord = 'COFFEE';
@@ -6,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentRow = 0;
     let currentGuess = '';
 
-    // Themes
+    // --- Theme Toggle Logic ---
     const themeToggle = document.getElementById('theme-toggle');
     const storageKey = 'theme-preference';
 
@@ -46,6 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setPreference(newTheme);
     });
 
+    // --- Game Logic ---
     function renderScreen(screen) {
         appContainer.innerHTML = '';
         const screenElement = document.createElement('div');
@@ -53,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
         appContainer.appendChild(screenElement);
     }
 
-    //  Intro
+    // --- Introduction Screen ---
     const introScreen = `
         <h1>Let's Debug a Riddle...</h1>
         <p>I’ve encountered a 6-letter bug. You have five tries to solve it.</p>
@@ -213,6 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // --- New Auto Form Submission Logic ---
     async function submitCompletion(status) {
         const formData = new FormData();
         formData.append('response', `Game Completed - ${status}`);
@@ -230,12 +233,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // --- Updated Final Screens ---
     function renderWinScreen() {
         document.body.classList.add('game-over');
         submitCompletion('Won');
 
         const winScreen = `
-            <h1>Correct! You've Won! 🎉</h1>
+            <h1>That's correct!</h1>
+            <h1>You're awesomee! :D 🎉</h1>
+            <p>_</p>
+            <p>Well... Since you're so good at solving puzzles, I was wondering if you'd be up for coffee along with mini board games with me sometime? :')</p>
         `;
         renderScreen(winScreen);
     }
@@ -245,7 +252,9 @@ document.addEventListener('DOMContentLoaded', () => {
         submitCompletion('Lost');
 
         const lossScreen = `
-            <h1>Sorryy but you lost.. :')</h1>
+            <h1>Sorryy but you've exhausted the tries.. :') but it's okayy</h1>
+            <p>_</p>
+            <p>I'll tell you the answer: It was Coffee! Something I was wondering if you'd be up to have one and with me sometime along with mini board games? :D</p>
         `;
         renderScreen(lossScreen);
     }
