@@ -1,4 +1,3 @@
-// script.js
 document.addEventListener('DOMContentLoaded', () => {
     const appContainer = document.getElementById('app-container');
     const secretWord = 'COFFEE';
@@ -7,12 +6,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentRow = 0;
     let currentGuess = '';
 
-    // --- Theme Toggle Logic ---
+    // Themes
     const themeToggle = document.getElementById('theme-toggle');
     const storageKey = 'theme-preference';
 
     const onClick = () => {
-        // flip current value
         const currentTheme = document.body.getAttribute('data-theme');
         const newTheme = currentTheme === 'light' ? 'dark' : 'light';
         setPreference(newTheme);
@@ -40,17 +38,14 @@ document.addEventListener('DOMContentLoaded', () => {
     reflectPreference(initialTheme);
 
     window.onload = () => {
-        // now this script can find and listen for clicks on the control
         document.querySelector('#theme-toggle').addEventListener('click', onClick);
     };
 
-    // sync with system changes
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', ({ matches: isDark }) => {
         const newTheme = isDark ? 'dark' : 'light';
         setPreference(newTheme);
     });
 
-    // --- Game Logic ---
     function renderScreen(screen) {
         appContainer.innerHTML = '';
         const screenElement = document.createElement('div');
@@ -58,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
         appContainer.appendChild(screenElement);
     }
 
-    // --- Introduction Screen ---
+    //  Intro
     const introScreen = `
         <h1>Let's Debug a Riddle...</h1>
         <p>I’ve encountered a 6-letter bug. You have five tries to solve it.</p>
@@ -71,11 +66,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Game Screen ---
     function renderGameScreen() {
         const gameScreen = `
-            <h1>Bug hunting!</h1>
+            <h1>Word hunting!</h1>
             <p class="hint">Hint: It's something you love, and Karnataka's popular for it.</p>
-            <p class="hint">Green means it's present and the position is correct as well.</p>
-            <p class="hint">Grey means the position and the character both are incorrect.</p>
-            <p class="hint">Pink means that the character is present but position is incorrect.</p>
             <div id="game-grid"></div>
             <div id="keyboard"></div>
             <div id="feedback" class="feedback"></div>
@@ -160,15 +152,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function checkGuess() {
         const guess = currentGuess;
         const secret = secretWord.toUpperCase();
-        const feedbackDiv = document.getElementById('feedback');
         const row = document.getElementById('game-grid').children[currentRow];
         const boxes = row.querySelectorAll('.box');
-
         const secretLetters = secret.split('');
         const guessLetters = guess.split('');
         const letterStatus = {};
 
-        // First pass: find correct letters
         for (let i = 0; i < wordLength; i++) {
             if (guessLetters[i] === secretLetters[i]) {
                 boxes[i].classList.add('correct');
@@ -177,7 +166,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Second pass: find present and absent letters
         for (let i = 0; i < wordLength; i++) {
             if (!boxes[i].classList.contains('correct')) {
                 if (secretLetters.includes(guessLetters[i])) {
@@ -224,108 +212,41 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     }
-    
-    // New function to handle the AJAX form submissions for both screens
-    function setupFormSubmission(formId) {
-        const form = document.getElementById(formId);
 
-        form.addEventListener('submit', async (event) => {
-            event.preventDefault(); // This is the key line that stops the redirect
+    async function submitCompletion(status) {
+        const formData = new FormData();
+        formData.append('response', `Game Completed - ${status}`);
 
-            const data = new FormData(form);
-
-            try {
-                const response = await fetch(form.action, {
-                    method: form.method,
-                    body: data,
-                    headers: {
-                        'Accept': 'application/json'
-                    }
-                });
-
-                if (response.ok) {
-                    const responseType = data.get('response');
-                    renderFinalScreen(responseType);
-                } else {
-                    renderErrorScreen();
+        try {
+            await fetch("https://formspree.io/f/xyzdyylp", {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
                 }
-            } catch (error) {
-                console.error('Submission error:', error);
-                renderErrorScreen();
-            }
-        });
-    }
-
-    // New function to render the final message screen
-    function renderFinalScreen(responseType) {
-        let message = '';
-        if (responseType === 'Yes - from Win Screen' || responseType === 'Yes - from Loss Screen') {
-            message = "Great!! I look forward to seeing you :D ";
-        } else if (responseType === 'No - from Win Screen' || responseType === 'No - from Loss Screen') {
-            message = "I understand, thank you for going through this mini game though :') I hope for nothing but the best for you!";
+            });
+        } catch (error) {
+            console.error('Submission error:', error);
         }
-
-        const finalScreen = `
-            <div class="final-message-container">
-                <p class="body">${message}</p>
-            </div>
-        `;
-        renderScreen(finalScreen);
-        document.body.classList.add('black-background'); // Add class to make the body black
-        document.querySelector('.theme-switch-wrapper').style.display = 'none'; // Hide the theme switch
-    }
-
-    // New function to render the error screen
-    function renderErrorScreen() {
-        const errorScreen = `
-            <div class="final-message-container">
-                <p class="body">Response isn't recorded, can you please DM me back :')</p>
-            </div>
-        `;
-        renderScreen(errorScreen);
-        document.body.classList.add('black-background'); // Add class to make the body black
-        document.querySelector('.theme-switch-wrapper').style.display = 'none'; // Hide the theme switch
     }
 
     function renderWinScreen() {
         document.body.classList.add('game-over');
+        submitCompletion('Won');
+
         const winScreen = `
             <h1>Correct! You've Won! 🎉</h1>
-            <p>Well... Since you're so good at solving puzzles, I was wondering if you'd be up for grabbing a coffee this Sunday? :D</p>
-            
-            <form id="winFormYes" action="https://formspree.io/f/xyzdyylp" method="POST">
-                <input type="hidden" name="response" value="Yes - from Win Screen">
-                <button type="submit" class="button">Sure, Let's do it!</button>
-            </form>
-
-            <form id="winFormNo" action="https://formspree.io/f/xyzdyylp" method="POST">
-                <input type="hidden" name="response" value="No - from Win Screen">
-                <button type="submit" class="button_2">I can't.</button>
-            </form>
         `;
         renderScreen(winScreen);
-        setupFormSubmission('winFormYes');
-        setupFormSubmission('winFormNo');
     }
 
     function renderLossScreen() {
         document.body.classList.add('game-over');
-        const lossScreen = `
-            <h1>Sorryy, that wasn't it.. :')</h1>
-            <p>But I'll tell you the answer: It was Coffee! Something I was wondering if you'd be up to have one with me this Sunday? :D</p>
-            
-            <form id="lossFormYes" action="https://formspree.io/f/xyzdyylp" method="POST">
-                <input type="hidden" name="response" value="Yes - from Loss Screen">
-                <button type="submit" class="button">Okay, I'm in.</button>
-            </form>
+        submitCompletion('Lost');
 
-            <form id="lossFormNo" action="https://formspree.io/f/xyzdyylp" method="POST">
-                <input type="hidden" name="response" value="No - from Loss Screen">
-                <button type="submit" class="button_2">I'm out.</button>
-            </form>
+        const lossScreen = `
+            <h1>Sorryy but you lost.. :')</h1>
         `;
         renderScreen(lossScreen);
-        setupFormSubmission('lossFormYes');
-        setupFormSubmission('lossFormNo');
     }
 });
