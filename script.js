@@ -235,7 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Updated Final Screens ---
     function renderWinScreen() {
-        document.body.classList.add('game-over');
+        //document.body.classList.add('game-over');
         submitCompletion('Won');
 
         const winScreen = `
@@ -248,7 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderLossScreen() {
-        document.body.classList.add('game-over');
+        //document.body.classList.add('game-over');
         submitCompletion('Lost');
 
         const lossScreen = `

@@ -114,6 +114,9 @@ body[data-theme='dark'] .key:hover {
 }
 
 /* --- Shared Game Styles (non-theme specific) --- */
+/* style.css */
+
+/* --- Add the background to the main body element --- */
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     display: flex;
@@ -124,28 +127,33 @@ body {
     padding: 20px;
     box-sizing: border-box;
     transition: background-color 0.5s, color 0.5s;
-}
 
-body.game-over {
-    background-image: url('bg.jpg');
+    /* Add these lines for the universal background */
+    background-image: url('bg.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    overflow: hidden; /* Prevents scrollbars from appearing */
+    overflow: hidden; /* Prevents scrollbars */
 }
 
-body.game-over::before {
+/* --- This pseudo-element creates the dim/blur effect over the background --- */
+body::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5); /* This creates the dimming effect */
+    background-color: rgba(0, 0, 0, 0.5); /* Adjust opacity for dimming */
     backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px); /* For Safari compatibility */
-    z-index: -1;
+    -webkit-backdrop-filter: blur(4px);
+    z-index: -1; /* Places the overlay behind the content */
 }
+
+/* You can now DELETE the old 'body.game-over' and 'body.game-over::before' 
+  rules from the end of your stylesheet, as they are no longer needed. 
+*/
+
 
 #app-container {
     border-radius: 12px;
