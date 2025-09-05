@@ -2,7 +2,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const appContainer = document.getElementById('app-container');
     const secretWord = 'COFFEE';
-    const maxTries = 5;
+    const maxTries = 6; // Changed from 5 to 6
     const wordLength = 6;
     let currentRow = 0;
     let currentGuess = '';
@@ -57,8 +57,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Introduction Screen ---
     const introScreen = `
-        <h1>Let's Debug a Riddle...</h1>
-        <p>I’ve encountered a 6-letter bug. You have five tries to solve it.</p>
+        <h1>Let's solve a wordle...</h1>
+        <p>It's a 6-letter word. You have six tries to solve it.</p> 
         <button id="startButton" class="button">Start</button>
     `;
 
@@ -210,6 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     keyBtn.classList.add('present');
                 } else if (currentStatus === 'absent' && !keyBtn.classList.contains('correct') && !keyBtn.classList.contains('present')) {
                     keyBtn.classList.add('absent');
+                    keyBtn.disabled = true; // Disable the key
                 }
             }
         }
