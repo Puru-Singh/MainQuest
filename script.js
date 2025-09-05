@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderGameScreen() {
         const gameScreen = `
             <h1>Word hunting!</h1>
-            <p class="hint">Hint: It's something you love, and Karnataka's popular for it.</p>
+            <p class="hint">Hint: It's something people bond over, and Karnataka's popular for it.</p>
             <div id="game-grid"></div>
             <div id="keyboard"></div>
             <div id="feedback" class="feedback"></div>
