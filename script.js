@@ -243,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <h1>That's correct!</h1>
             <h1>You're awesomee! :D 🎉</h1>
             <p>_</p>
-            <p>Well... Since you're so good at solving puzzles, I was wondering if you'd be up for coffee + cute mini games with me sometime? :D</p>
+            <p>Well... Since you're so good at solving puzzles, I was wondering if you'd be up for coffee + cute mini games with me this saturday? :D</p>
         `;
         renderScreen(winScreen);
     }
@@ -255,7 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const lossScreen = `
             <h1>Sorryy but you've exhausted the tries.. :') but it's okayy</h1>
             <p>_</p>
-            <p>I'll tell you the answer: It was coffee! Which made me wonder, would you be up for grabbing a cup with me sometime along with cute mini games? :D</p>
+            <p>I'll tell you the answer: It was coffee! Which made me wonder, would you be up for grabbing a cup with me this saturday along with cute mini games? :D</p>
         `;
         renderScreen(lossScreen);
     }
